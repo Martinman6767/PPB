@@ -147,16 +147,77 @@ public class GameMenu
             writer.write(starter.getType() + "\n");
             writer.write(starter.getMaxHp() + "\n");
             writer.write(starter.getAttack() + "\n");
+            System.out.println("\nAccount created successfully!");
         }
         catch (IOException e)
         {
-            
+            System.out.println("[ERROR] System could not write profile file.");
         }
+        
     }
     public boolean HandleLogin()
     {
+        System.out.println("=== LOG IN ===");
+        System.out.println("Enter Username: ");
+        
+        boolean bolCheck = false; 
+        String strUserName;
+
+        do
+        {
+            strUserName = new Scanner(System.in).nextLine();
+        
+            File userFile = new File(strUserName + ".txt");
+            if(!userFile.exists())
+            {
+                System.out.println("This username dosn't exist. Please renter username");
+                bolCheck = true;
+            }
+        }while (bolCheck);
+        
+        File userFile = new File(strUserName + ".txt");
+        
+        System.out.println("Enter Password: ");
+        String strLine;
+        String strSavedPassword = "";
+        
+        
+        try 
+        {
+            Scanner scanner = new Scanner(new FileReader(userFile));
+            strSavedPassword = scanner.nextLine();
+            do
+            {
+                String strPassword = new Scanner(System.in).nextLine();
+                if(strPassword == strSavedPassword)
+                {
+                    this.player = new Player(strUserName, strPassword);
+                    
+                    String pName = scanner.nextLine();
+                    String pType = scanner.nextLine();
+                    short pHp = Short.parseShort(scanner.nextLine());
+                    short pAtk = Short.parseShort(scanner.nextLine());
+                    
+                    Pokemon loadedMon = new Pokemon(pName, pType, pHp, pAtk);
+                    this.player.AddPokemon(loadedMon);
+                }
+                    else
+                {
+                    System.out.println("Password entered was incorrect");
+                    bolCheck = true; 
+                }
+            }while(bolCheck); 
+        } 
+        
+        catch (FileNotFoundException e) 
+        {    
+            e.printStackTrace();
+        }
+        
+        
+        
         return true; 
-    }
+        }
     public void runGameHub()
     {
         
