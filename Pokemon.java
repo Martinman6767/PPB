@@ -30,7 +30,7 @@ public class Pokemon
     
     public void TakeDamage(int intdamage)
     {
-        this.shrHPcurrent -= intdamage; 
+        this.shrHPcurrent = shrHPmax; 
         if(this.shrHPcurrent<0)
         {
             this.shrHPcurrent = 0;
@@ -49,7 +49,10 @@ public class Pokemon
             return false; 
         }
     }
-    
+    public byte getLevel()
+    {
+        return this.bytLevel;
+    }
     public void heal()
     {
         this.shrHPcurrent += 30; 

@@ -18,13 +18,8 @@ public class GameManager
     boolean bolBattleRunning;
     byte bytTurnCounter;
     
-    GameManager()
-    {
-        this.bolBattleRunning = false; 
-        this.bytTurnCounter = 0; 
-    }
  
-    public void startBattle(Player player, Trainer opponent)
+    public boolean startBattle(Player player, Trainer opponent)
     {
         this.player = player;
         this.opponent = opponent;
@@ -34,15 +29,21 @@ public class GameManager
         this.active = player.getParty().get(0); 
         this.activeEnemy = opponent.getParty().get(0); 
         
+        boolean bolWon = false; 
         System.out.println("==================Battle Started==================");
         System.out.println(opponent.getName() + " wants to battle!");
-        System.out.println("You sent out "+ active.getName());
+        System.out.println("You sent out "+ this.active.getName());
         while(bolBattleRunning)
         {
-            RunChoice(); 
+            bolWon = RunChoice(); 
+            if(bolBattleRunning == false)
+            {
+                return bolWon; 
+            }
         }
+        return false;
     }
-    public void RunChoice()
+    public boolean RunChoice()
     {
         System.out.println("\n--- Turn " + bytTurnCounter + " ---");
         System.out.println("Enemy: " + activeEnemy.getName() + " (HP: " + activeEnemy.getCurrentHp() + "/" + activeEnemy.getMaxHp() + ")");
@@ -76,7 +77,7 @@ public class GameManager
                 //update boolean to true to loop again
                 bolTryCatch = true;
              }
-             else if (bytChoice != 1 || bytChoice != 2)
+             else if (bytChoice != 1 && bytChoice != 2)
              {
                 System.out.println("Error.  Please enter choice as either 1 or 2");
                 
@@ -93,7 +94,6 @@ public class GameManager
             {
                 System.out.println(activeEnemy.getName() + " fainted! You win!");
                 bolBattleRunning = false;
-                return;
             }
             System.out.println(activeEnemy.getName() + " attacks back for " + activeEnemy.getAttack() + " damage!");
             active.TakeDamage(activeEnemy.getAttack());
@@ -101,13 +101,13 @@ public class GameManager
             {
                 System.out.println(active.getName() + " fainted! You lost the battle...");
                 bolBattleRunning = false;
-                return;
             }
         }
         else if (bytChoice == 2) {
             System.out.println("You fled from the battle!");
             bolBattleRunning = false;
         }
+        return bolBattleRunning;
     }
 }
     

@@ -8,12 +8,28 @@
 public class Player extends Trainer
 {
     private String strPass;    
-    private int intProg; 
+    private byte bytProg; 
     
     Player(String x, String y)
     {
         super(x);
         this.strPass = y;
-        this.intProg = 1;
+        this.bytProg = 1;
+    }
+    public void advanceLevel()
+    {
+        this.bytProg++; 
+    }
+    public int getPorg()
+    {
+        return this.bytProg; 
+    }
+    public void setProg(byte x)
+    {
+        this.bytProg = x; 
+    }
+    public String getPassword()
+    {
+        return this.strPass;
     }
 }

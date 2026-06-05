@@ -10,7 +10,21 @@ import java.io.*;
 public class GameMenu
 {
     private Player player; 
-    
+    private Trainer getOpponentForLevel(int level) 
+    {
+        if (level == 1) 
+        {
+            Trainer t = new Trainer("BugCatcher");
+            t.AddPokemon(new Pokemon("Rattata",     "Normal", (short)40, (short)7));
+            return t;
+        }
+        else 
+        {
+            Trainer t = new Trainer("Martin");
+            t.AddPokemon(new Pokemon("Pidgey", "Flying", (short)48, (short)10));
+            return t;
+        }
+    }
     public void runGameMenu()
     {
         boolean bolTryCatch;
@@ -147,6 +161,7 @@ public class GameMenu
             writer.write(starter.getType() + "\n");
             writer.write(starter.getMaxHp() + "\n");
             writer.write(starter.getAttack() + "\n");
+            writer.write(this.player.getPorg());
             System.out.println("\nAccount created successfully!");
         }
         catch (IOException e)
@@ -178,8 +193,9 @@ public class GameMenu
         File userFile = new File(strUserName + ".txt");
         
         System.out.println("Enter Password: ");
-        String strLine;
+   
         String strSavedPassword = "";
+        
         
         
         try 
@@ -189,7 +205,7 @@ public class GameMenu
             do
             {
                 String strPassword = new Scanner(System.in).nextLine();
-                if(strPassword == strSavedPassword)
+                if(strPassword.equals(strSavedPassword))
                 {
                     this.player = new Player(strUserName, strPassword);
                     
@@ -197,6 +213,7 @@ public class GameMenu
                     String pType = scanner.nextLine();
                     short pHp = Short.parseShort(scanner.nextLine());
                     short pAtk = Short.parseShort(scanner.nextLine());
+                    this.player.setProg(Byte.parseByte(scanner.nextLine()));
                     
                     Pokemon loadedMon = new Pokemon(pName, pType, pHp, pAtk);
                     this.player.AddPokemon(loadedMon);
@@ -213,16 +230,79 @@ public class GameMenu
         {    
             e.printStackTrace();
         }
-        
-        
-        
         return true; 
         }
     public void runGameHub()
     {
+        byte bytChoice = 0;
+        boolean bolCheck = true;
+        System.out.println("\n=== GAME HUB ===");
+        System.out.println("Trainer: " + this.player.getName());
+        System.out.println("Current Level Progress: Tier " + this.player.getPorg());
+        System.out.println("--------------------------------");
+        System.out.println("1. Battle Next Tier (Level " + this.player.getPorg() + ")");
+        System.out.println("2. Rebattle an Old Level");
+        System.out.println("3. Heal Pokémon Team");
+        System.out.println("4. Log Out");
+        System.out.print("What would you like to do? ");
+        do 
+        {
+            try 
+            {
+                bytChoice = new Scanner(System.in).nextByte();
+                bolCheck = false;
+            } 
+            catch (Exception e) 
+            {
+                System.out.println("[ERROR] Please enter a valid whole number.");
+                bolCheck = true;
+            }
+            if (bytChoice < 1 || bytChoice > 4) 
+            {
+                System.out.println("[ERROR] Please select an option between 1 and 4.");
+                bolCheck = true;
+
+            }
+        } while (bolCheck);
+        if (bytChoice == 1)
+        {
+            Trainer opponent = getOpponentForLevel(this.player.getPorg());
+            this.player.getParty().get(0).heal();
+                
+            GameManager battleManager = new GameManager();
+            boolean bolWin = battleManager.startBattle(this.player, opponent);
+            if(bolWin == true)
+            {
+                System.out.println("\n***VICTORY!*** You defeated " + opponent.getName() + "!");
+                this.player.advanceLevel(); 
+                savePlayerProgress();
+            }
+            else
+            {
+                System.out.println("Wah Wah you lost ");
+            }
+        }
         
     }
-    
-    
-}
+    public void savePlayerProgress()
+    {
+        File userFile = new File(this.player.getName() + ".txt");
+        Pokemon leadMon = this.player.getParty().get(0);
+        
+        try (FileWriter writer = new FileWriter(userFile))
+        {
+                writer.write(this.player.getPassword() + "\n");
+                writer.write(leadMon.getName() + "\n");
+                writer.write(leadMon.getType() + "\n");
+                writer.write(leadMon.getMaxHp() + "\n");
+                writer.write(leadMon.getAttack() + "\n");
+                writer.write(this.player.getPorg() + "\n"); 
+        }
+        catch (IOException e)
+        {
+            System.out.println("[ERROR] Auto-save failed.");
+        }
+    }
+    }
+
    
