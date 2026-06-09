@@ -26,8 +26,8 @@ public class GameManager
         this.bolBattleRunning = true; 
         this.bytTurnCounter = 1; 
         
-        this.active = player.getParty().get(0); 
-        this.activeEnemy = opponent.getParty().get(0); 
+        this.active = this.player.getParty().get(0); 
+        this.activeEnemy = this.opponent.getParty().get(0); 
         
         boolean bolWon = false; 
         System.out.println("==================Battle Started==================");

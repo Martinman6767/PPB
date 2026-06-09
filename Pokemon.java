@@ -9,23 +9,17 @@ public class Pokemon
 {
     private String strName;
     private String strType;
-    private byte bytLevel;
     private short shrHPmax;
     private short shrHPcurrent;
     private short shrAttack;
-    private short shrExpCurrent;
-    private short shrExpNeed;
     
-    Pokemon(String x, String y, short z, short e    )
+    Pokemon(String x, String y, short z, short e)
     {
         this.strName = x;
         this.strType = y;
-        this.bytLevel = 1;
         this.shrHPmax = z;
         this.shrHPcurrent = z;
         this.shrAttack = e;
-        this.shrExpCurrent = 0;
-        this.shrExpNeed = 100;
     }
     
     public void TakeDamage(short shrdamage)
@@ -37,7 +31,6 @@ public class Pokemon
         }
         
     }
-    
     public boolean Fainted()
     {
         if(this.shrHPcurrent <= 0)
@@ -49,10 +42,16 @@ public class Pokemon
             return false; 
         }
     }
-    public byte getLevel()
+    public void gainVictoryStats(short hpIncrease, short atkIncrease)
     {
-        return this.bytLevel;
-    }
+        this.shrHPmax += hpIncrease;
+        this.shrAttack += atkIncrease;
+        this.shrHPcurrent = this.shrHPmax; // Fully heal up with your new max stats!
+        
+        System.out.println(this.strName + " grew stronger!");
+        System.out.println("-> Max HP is now: " + this.shrHPmax);
+        System.out.println("-> Attack is now: " + this.shrAttack);
+        }
     public void heal()
     {
         this.shrHPcurrent = shrHPmax; 

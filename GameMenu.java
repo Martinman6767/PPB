@@ -124,7 +124,7 @@ public class GameMenu
     {
         boolean bolCheck = true; 
         System.out.println("Create an account \nEnter Username: ");
-        File userFile = null;
+        File userFile;
         String strUsername = "";
         do{
             strUsername = new Scanner (System.in).next(); 
@@ -207,7 +207,6 @@ public class GameMenu
             this.player = new Player(strUsername, strPassword);
             this.player.AddPokemon(starter);
             this.player.setProg((byte)1); 
-            
             return true;
         }
         catch (IOException e)
@@ -290,7 +289,14 @@ public class GameMenu
         {
             System.out.println("\n=== GAME HUB ===");
             System.out.println("Trainer: " + this.player.getName());
-            System.out.println("Current Level Progress: Tier " + this.player.getPorg());
+            if(this.player.getPorg() < 8)
+            {
+                System.out.println("Current Level Progress: Tier " + this.player.getPorg());
+            }
+            else
+            {
+                System.out.println("Current Level Progress: FINAL CHAMPTION TIER");
+            }
             System.out.println("--------------------------------");
             System.out.println("1. Battle Next Tier (Level " + this.player.getPorg() + ")");
             System.out.println("2. Rebattle an Old Level");
@@ -320,28 +326,37 @@ public class GameMenu
                     System.out.println("[ERROR] You haven't cleared any old levels to rebattle yet!");
                     bolCheck = true;
                 }
-            } while (bolCheck);
-            if (bytChoice == 1)
-            {
-                if (this.player.getPorg() > 8)
+                if(bytChoice == 1 && this.player.getPorg() > 8)
                 {
                     System.out.println("\n==================================================");
-                    System.out.println("🎉CONGRATULATIONS! You are already the CHAMPION! ");
+                    System.out.println("?CONGRATULATIONS! You are already the CHAMPION! ");
                     System.out.println("You have cleared the main story campaign.");
                     System.out.println("You can still use Option 2 to rebattle past trainers.");
                     System.out.println("==================================================");
-                    bolLoop = true;
+                    bolCheck = true;
                 }
+            } while (bolCheck);
+            if (bytChoice == 1)
+            {
+
                 Trainer opponent = getOpponentForLevel(this.player.getPorg());
                 this.player.getParty().get(0).heal();
-                    
                 GameManager battleManager = new GameManager();
                 boolean bolWin = battleManager.startBattle(this.player, opponent);
                 if(bolWin == true)
                 {
                     System.out.println("\n***VICTORY!*** You defeated " + opponent.getName() + "!");
-                    this.player.advanceLevel(); 
+                    System.out.println("Your pokemon has gained Damage and health");
+                    short shrGain = (short)(this.player.getPorg() * 3);
+                    short shrGainHealth = (short)(this.player.getPorg() * 5);
+                    this.player.getParty().get(0).gainVictoryStats(shrGain, shrGainHealth);
+                    if(this.player.getPorg() < 8)
+                    {
+                       this.player.advanceLevel();  
+                    }
+                    
                     savePlayerProgress();
+                    
                 }
                 else
                 {
@@ -361,17 +376,21 @@ public class GameMenu
                     }
                     catch (Exception e)
                     {
-                        System.out.println("[ERROR] Invalid level selection.");
+                        System.out.println("[ERROR] Invalid level selection");
                     }
                     if(bytChooselevel > (this.player.getPorg() - 1))
                     {
-                        System.out.println("[ERROR] Invalid level selection.");
+                        System.out.println("[ERROR] Invalid level selection");
                     }
                 }while(bolCheck);
                 Trainer oldOpponent = getOpponentForLevel(bytChooselevel);
                 this.player.getParty().get(0).heal();
                 GameManager battleManager = new GameManager();
                 battleManager.startBattle(this.player, oldOpponent);
+                System.out.println("Your pokemon has gained Damage and health");
+                short shrGain = (short)(bytChooselevel * 3);
+                short shrGainHealth = (short)(bytChooselevel * 5);
+                this.player.getParty().get(0).gainVictoryStats(shrGain, shrGainHealth);
                 System.out.println("\nRebattle completed successfully.");
                 bolLoop = true;
             }

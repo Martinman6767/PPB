@@ -17,10 +17,7 @@ public class Trainer
     
     public void AddPokemon(Pokemon p)
     {
-        if(Party.size()<6)
-            {
-            Party.add(p);
-        }
+        Party.add(p);
     }
     
     public ArrayList<Pokemon> getParty()
