@@ -12,7 +12,7 @@ public class Pokemon
     private byte bytLevel;
     private short shrHPmax;
     private short shrHPcurrent;
-    private short byteAttack;
+    private short shrAttack;
     private short shrExpCurrent;
     private short shrExpNeed;
     
@@ -23,14 +23,14 @@ public class Pokemon
         this.bytLevel = 1;
         this.shrHPmax = z;
         this.shrHPcurrent = z;
-        this.byteAttack = e;
+        this.shrAttack = e;
         this.shrExpCurrent = 0;
         this.shrExpNeed = 100;
     }
     
-    public void TakeDamage(int intdamage)
+    public void TakeDamage(short shrdamage)
     {
-        this.shrHPcurrent = shrHPmax; 
+        this.shrHPcurrent -= shrdamage; 
         if(this.shrHPcurrent<0)
         {
             this.shrHPcurrent = 0;
@@ -55,7 +55,7 @@ public class Pokemon
     }
     public void heal()
     {
-        this.shrHPcurrent += 30; 
+        this.shrHPcurrent = shrHPmax; 
     }
     public String getType()
     {
@@ -65,9 +65,9 @@ public class Pokemon
     { 
         return this.strName; 
     }
-    public int getAttack() 
+    public short getAttack() 
     { 
-        return this.byteAttack; 
+        return this.shrAttack; 
     }
     public int getCurrentHp() 
     { 

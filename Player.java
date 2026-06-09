@@ -20,7 +20,7 @@ public class Player extends Trainer
     {
         this.bytProg++; 
     }
-    public int getPorg()
+    public byte getPorg()
     {
         return this.bytProg; 
     }

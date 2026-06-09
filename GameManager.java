@@ -88,26 +88,32 @@ public class GameManager
         if(bytChoice == 1)
         {
             System.out.println("\n" + active.getName() + " attacks for " + active.getAttack() + " damage!");
-            activeEnemy.TakeDamage(active.getAttack());
+            this.activeEnemy.TakeDamage(active.getAttack());
 
             if (activeEnemy.Fainted()) 
             {
                 System.out.println(activeEnemy.getName() + " fainted! You win!");
                 bolBattleRunning = false;
+                return true;
             }
-            System.out.println(activeEnemy.getName() + " attacks back for " + activeEnemy.getAttack() + " damage!");
-            active.TakeDamage(activeEnemy.getAttack());
-            if (active.Fainted()) 
+            else
             {
-                System.out.println(active.getName() + " fainted! You lost the battle...");
-                bolBattleRunning = false;
+                System.out.println(activeEnemy.getName() + " attacks back for " + activeEnemy.getAttack() + " damage!");
+                active.TakeDamage(activeEnemy.getAttack());
+                if (active.Fainted()) 
+                {
+                    System.out.println(active.getName() + " fainted! You lost the battle...");
+                    bolBattleRunning = false;
+                    return false;
+                }
             }
+            
         }
         else if (bytChoice == 2) {
             System.out.println("You fled from the battle!");
             bolBattleRunning = false;
         }
-        return bolBattleRunning;
+        return false;
     }
 }
     

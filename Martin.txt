@@ -3,4 +3,4 @@ Charmander
 Fire
 50
 12
-1
+3
