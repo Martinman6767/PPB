@@ -46,7 +46,6 @@ public class Pokemon
     {
         this.shrHPmax += hpIncrease;
         this.shrAttack += atkIncrease;
-        this.shrHPcurrent = this.shrHPmax; // Fully heal up with your new max stats!
         
         System.out.println(this.strName + " grew stronger!");
         System.out.println("-> Max HP is now: " + this.shrHPmax);
@@ -68,11 +67,11 @@ public class Pokemon
     { 
         return this.shrAttack; 
     }
-    public int getCurrentHp() 
+    public short getCurrentHp() 
     { 
         return this.shrHPcurrent; 
     }
-    public int getMaxHp() 
+    public short getMaxHp() 
     { 
         return this.shrHPmax; 
     }

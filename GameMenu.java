@@ -9,13 +9,23 @@ import java.util.Scanner;
 import java.io.*;
 public class GameMenu
 {
+    //Player object
     private Player player; 
+    
+    //Here grabs the trainer information for each battle
     private Trainer getOpponentForLevel(byte level) 
     {
+        //check what numebr level you are at and chose the correct trainer
+        //the following action will be the same for everysingle case
         if (level == 1)
         {
-            Trainer t = new Trainer("BugCatcher Rick");
+            //create an instance of the trainer
+            Trainer t = new Trainer("Rick");
+            
+            //calls a add pokemon method to add this pokemon information to the array
             t.AddPokemon(new Pokemon("Rattata", "Normal", (short)40, (short)7));
+            
+            //return this trainer with the appropriate informations or pokemons added
             return t;
         }
         else if (level == 2)
@@ -26,7 +36,7 @@ public class GameMenu
         }
         else if (level == 3)
         {
-            Trainer t = new Trainer("Camper Liam");
+            Trainer t = new Trainer("Elite trainer");
             t.AddPokemon(new Pokemon("Geodude", "Rock", (short)55, (short)13));
             return t;
         }
@@ -44,7 +54,7 @@ public class GameMenu
         }
         else if (level == 6)
         {
-            Trainer t = new Trainer("Sailor Duncan");
+            Trainer t = new Trainer("Sailor Jeff");
             t.AddPokemon(new Pokemon("Machop", "Fighting", (short)85, (short)22));
             return t;
         }
@@ -56,25 +66,35 @@ public class GameMenu
         }
         else 
         {
-            Trainer t = new Trainer("Ace Trainer Red");
-            t.AddPokemon(new Pokemon("Pikachu", "Electric", (short)110, (short)32));
+            Trainer t = new Trainer("Red");
+            t.AddPokemon(new Pokemon("Pikachu", "Electric", (short)220, (short)120));
             return t;
         }
-        
     }
+    //this lauches the menue where you chose your options of what you want to do
     public void runGameMenu()
     {
+        //check if loops ends
         boolean bolTryCatch;
+        
+        //to store choise
         byte bytChoice = 0; 
+        
+        //do while and try catch to 
         do
         {
-            System.out.println("\n=== POKÉMON TERMINAL PROGRESSION ===");
+            //output messages
+            System.out.println("\n=== POKEMON MENU PROGRESSION ===");
             System.out.println("1. Login");
             System.out.println("2. Create Account");
             System.out.println("3. Exit");
+            System.out.println("4. ReadRules");
             System.out.print("Choose an option: ");
+            
+            //try ctach loop
             try
             {
+                //populate varibale               
                 bytChoice = new Scanner(System.in).nextByte();
                  
                 //if it runs - set boolean to false to stop loop
@@ -83,54 +103,101 @@ public class GameMenu
             }
             catch(Exception e)
             {
-                System.out.println("Error.  Please enter Choice as a whole number");
+                //output message
+                System.out.println("[Error]Please enter Choice as a whole number");
+                
                 //set boolean to true - to loop again
                 bolTryCatch = true;
                  
             }
+            //makes sure it isn't megative
             if(bytChoice <0)
             {
-                System.out.println("Error.  Please enter choice as a positive number");
+                //output message
+                System.out.println("[Error]Please enter choice as a positive number");
+                
                 //update boolean to true to loop again
                 bolTryCatch = true;
             }
-            if (bytChoice != 1 && bytChoice != 2 && bytChoice != 3)             
-                {
-                System.out.println("Error.  Please enter choice as either 1 or 2 or 3");
+            if(bytChoice == 4)
+            {
                 bolTryCatch = true;
             }
+            //checks if it one of the options
+            if (bytChoice != 1 && bytChoice != 2 && bytChoice != 3 && bytChoice != 4)             
+            {
+                //output message
+                System.out.println("[Error]Please enter choice as either 1 or 2 or 3 or 4");
+                
+                //update boolean to true to loop again
+                bolTryCatch = true;
+            }
+            
         }while(bolTryCatch);
         
+        //run methods based of choice
         if (bytChoice == 1) 
         {
+            //runs login method and if it returns true than it starts game
             if (HandleLogin()) 
             {
+                //run your game
                 runGameHub();
             }
         } 
         else if (bytChoice == 2)
         {
+            //runs register method and returns true to run the game
             if(Register())
             {
+                //run your game
                 runGameHub();
             }
         } 
         else if (bytChoice == 3) {
+            //output message
             System.out.println("Goodbye!");
-            System.exit(0);
         }
     }
     public boolean Register()
     {
+        //variabels 
+        //used for loops
         boolean bolCheck = true; 
-        System.out.println("Create an account \nEnter Username: ");
+        
+        //define file variable
         File userFile;
+        
+        //starter cgiiuce
+        byte bytStarter = 0;
+        
+        //used for loop
+        boolean bolTryCatch;
+        
+        //create a intance of a pokemon based on the started you picked
+        Pokemon starter;
+        
+        //stores username
         String strUsername = "";
-        do{
+    
+        //stores password
+        String strPassword = ""; 
+        
+        //outputmessage
+        System.out.println("Create an account \nEnter Username: ");
+        do
+        {
+            //populate varaable 
             strUsername = new Scanner (System.in).next(); 
+            //set the user file to your username 
             userFile = new File(strUsername + ".txt");
+            
+            //search if this file exists
             if (userFile.exists()) {
+                //outputmessage
                 System.out.println("[ERROR] Username already exists!");
+                
+                //is true
                 bolCheck = true; 
             }
             else 
@@ -141,15 +208,12 @@ public class GameMenu
         
         System.out.println("Enter Password: ");
         
-        String strPassword = new Scanner (System.in).next(); 
+        strPassword = new Scanner (System.in).next(); 
         
         System.out.println("\nChoose your Starter Pokémon:");
         
         System.out.println("1. Charmander\n2. Bulbasaur\n3. Squirtle");
 
-        byte bytStarter = 0;
-        
-        boolean bolTryCatch;
         
         do
         {
@@ -164,6 +228,7 @@ public class GameMenu
             catch(Exception e)
             {
                 System.out.println("Error.  Please enter Choice as a whole number");
+                
                 //set boolean to true - to loop again
                 bolTryCatch = true;
                  
@@ -181,7 +246,7 @@ public class GameMenu
             }
         }while(bolTryCatch);
         
-        Pokemon starter;
+        
         if (bytStarter == 2) 
         {
             starter = new Pokemon("Bulbasaur", "Grass", (short)55, (short)9);
@@ -219,7 +284,7 @@ public class GameMenu
     {
         System.out.println("=== LOG IN ===");
         System.out.println("Enter Username: ");
-        
+        String strSavedPassword = "";
         boolean bolCheck = false; 
         String strUserName;
 
@@ -243,19 +308,17 @@ public class GameMenu
         
         System.out.println("Enter Password: ");
    
-        String strSavedPassword = "";
-        
         try 
         {
             Scanner scanner = new Scanner(new FileReader(userFile));
             strSavedPassword = scanner.nextLine();
             do
             {
+                
                 String strPassword = new Scanner(System.in).nextLine();
                 if(strPassword.equals(strSavedPassword))
                 {
                     this.player = new Player(strUserName, strPassword);
-                    
                     String pName = scanner.nextLine();
                     String pType = scanner.nextLine();
                     short pHp = Short.parseShort(scanner.nextLine());
@@ -264,8 +327,9 @@ public class GameMenu
                     
                     Pokemon loadedMon = new Pokemon(pName, pType, pHp, pAtk);
                     this.player.AddPokemon(loadedMon);
+                    bolCheck = false; 
                 }
-                    else
+                else
                 {
                     System.out.println("Password entered was incorrect");
                     bolCheck = true; 
@@ -275,7 +339,8 @@ public class GameMenu
         
         catch (FileNotFoundException e) 
         {    
-            e.printStackTrace();
+            System.out.println("ERROR");
+            return false; 
         }
         return true; 
         }
@@ -287,24 +352,33 @@ public class GameMenu
         
         do
         {
-            System.out.println("\n=== GAME HUB ===");
-            System.out.println("Trainer: " + this.player.getName());
-            if(this.player.getPorg() < 8)
-            {
-                System.out.println("Current Level Progress: Tier " + this.player.getPorg());
-            }
-            else
-            {
-                System.out.println("Current Level Progress: FINAL CHAMPTION TIER");
-            }
-            System.out.println("--------------------------------");
-            System.out.println("1. Battle Next Tier (Level " + this.player.getPorg() + ")");
-            System.out.println("2. Rebattle an Old Level");
-            System.out.println("3. Heal Pokémon Team");
-            System.out.println("4. Log Out");
-            System.out.print("What would you like to do? ");
             do 
             {
+                System.out.println("\n=== GAME HUB ===");
+                System.out.println("Trainer: " + this.player.toString());
+                if(this.player.getPorg() < 8)
+                {
+                    System.out.println("Current Level Progress: Tier " + this.player.getPorg());
+                }
+                else
+                {
+                    System.out.println("Current Level Progress: FINAL CHAMPTION TIER");
+                }
+                System.out.println("--------------------------------");
+                
+                if(this.player.getPorg() < 8)
+                {
+                    System.out.println("1. Battle Next Tier (Level " + this.player.getPorg() + ")");
+    
+                }
+                else
+                {
+                    System.out.println("1. Battle Next Tier (Level " + 8 + ")");
+                }
+                System.out.println("2. Rebattle an Old Level");
+                System.out.println("3. Heal Pokémon Team");
+                System.out.println("4. Log Out");
+                System.out.print("What would you like to do? ");
                 try 
                 {
                     bytChoice = new Scanner(System.in).nextByte();
@@ -335,12 +409,16 @@ public class GameMenu
                     System.out.println("==================================================");
                     bolCheck = true;
                 }
+                if(bytChoice == 1 && this.player.getParty().get(0).getCurrentHp() <= 0)
+                {
+                    System.out.println("Please heal your pokemon befor battle");
+                    bolCheck = true;    
+                }
             } while (bolCheck);
             if (bytChoice == 1)
             {
-
+                
                 Trainer opponent = getOpponentForLevel(this.player.getPorg());
-                this.player.getParty().get(0).heal();
                 GameManager battleManager = new GameManager();
                 boolean bolWin = battleManager.startBattle(this.player, opponent);
                 if(bolWin == true)
@@ -350,12 +428,7 @@ public class GameMenu
                     short shrGain = (short)(this.player.getPorg() * 3);
                     short shrGainHealth = (short)(this.player.getPorg() * 5);
                     this.player.getParty().get(0).gainVictoryStats(shrGain, shrGainHealth);
-                    if(this.player.getPorg() < 8)
-                    {
-                       this.player.advanceLevel();  
-                    }
-                    
-                    savePlayerProgress();
+                    this.player.advanceLevel();  
                     
                 }
                 else
@@ -373,18 +446,20 @@ public class GameMenu
                     try 
                     {
                         bytChooselevel = new Scanner(System.in).nextByte();
+                        bolCheck = false;
                     }
                     catch (Exception e)
                     {
                         System.out.println("[ERROR] Invalid level selection");
+                        bolCheck = true;
                     }
                     if(bytChooselevel > (this.player.getPorg() - 1))
                     {
                         System.out.println("[ERROR] Invalid level selection");
+                        bolCheck = true;
                     }
                 }while(bolCheck);
                 Trainer oldOpponent = getOpponentForLevel(bytChooselevel);
-                this.player.getParty().get(0).heal();
                 GameManager battleManager = new GameManager();
                 battleManager.startBattle(this.player, oldOpponent);
                 System.out.println("Your pokemon has gained Damage and health");
@@ -417,12 +492,12 @@ public class GameMenu
          
         try (FileWriter writer = new FileWriter(userFile))
         {
-                writer.write(this.player.getPassword() + "\n");
-                writer.write(leadMon.getName() + "\n");
-                writer.write(leadMon.getType() + "\n");
-                writer.write(leadMon.getMaxHp() + "\n");
-                writer.write(leadMon.getAttack() + "\n");
-                writer.write(this.player.getPorg() + "\n"); 
+            writer.write(this.player.getPassword() + "\n");
+            writer.write(leadMon.getName() + "\n");
+            writer.write(leadMon.getType() + "\n");
+            writer.write(leadMon.getMaxHp() + "\n");
+            writer.write(leadMon.getAttack() + "\n");
+            writer.write(this.player.getPorg() + "\n"); 
         }
         catch (IOException e)
         {

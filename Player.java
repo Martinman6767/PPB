@@ -32,4 +32,13 @@ public class Player extends Trainer
     {
         return this.strPass;
     }
+    @Override
+    public String toString() 
+    {        
+        if (this.getPorg() > 8) 
+        {
+            return "Champion " + super.getName() + "\n" + super.toString();
+        }
+        return super.getName() + "\n" + super.toString();
+    }   
 }

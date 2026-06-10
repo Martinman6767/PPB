@@ -10,6 +10,7 @@ public class Trainer
 {
     private String strName; 
     private ArrayList<Pokemon> Party= new ArrayList<Pokemon>();
+    
     Trainer(String x)
     {
         this.strName = x;
@@ -29,5 +30,15 @@ public class Trainer
     {
         return this.strName;
     }
-
+    
+    public String toString() 
+    {
+        String leadPokemonInfo = "No Pokémon";
+        if (this.Party != null && !this.Party.isEmpty()) 
+        {
+            leadPokemonInfo = this.Party.get(0).getName();
+        }
+    
+        return "Trainer: " + this.strName + " | Lead Partner: " + leadPokemonInfo;
+    }
 }
